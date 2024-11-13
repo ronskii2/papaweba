@@ -40,3 +40,4 @@ class User(Base):
     chats: Mapped[List["Chat"]] = relationship("Chat", back_populates="user", cascade="all, delete-orphan")
     subscriptions: Mapped[List["UserSubscription"]] = relationship("UserSubscription", back_populates="user", cascade="all, delete-orphan")
     tool_usages: Mapped[List["ToolUsage"]] = relationship("ToolUsage", back_populates="user", cascade="all, delete-orphan")
+    images: Mapped[List["UserImage"]] = relationship("UserImage", back_populates="user", cascade="all, delete-orphan")

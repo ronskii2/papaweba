@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     # API Keys
     ANTHROPIC_API_KEY: str
     OPENAI_API_KEY: str
+    BFL_API_KEY: str
 
     class Config:
         env_file = ".env"
