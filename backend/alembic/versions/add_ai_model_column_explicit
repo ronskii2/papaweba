@@ -1,0 +1,47 @@
+"""add_ai_model_column_explicit
+
+Revision ID: xxx  # оставляем как есть
+Revises: 96a8870b61ab  # ID предыдущей миграции
+Create Date: 2024-01-16 12:00:00.000000
+
+"""
+from alembic import op
+import sqlalchemy as sa
+
+# revision identifiers, used by Alembic
+revision = 'xxx'  # оставляем как есть
+down_revision = '96a8870b61ab'  # ID предыдущей миграции
+branch_labels = None
+depends_on = None
+
+def upgrade():
+    # Используем прямой SQL для добавления колонки
+    op.execute("""
+        DO $$ 
+        BEGIN 
+            BEGIN
+                ALTER TABLE users 
+                ADD COLUMN ai_model VARCHAR(50) 
+                NOT NULL 
+                DEFAULT 'claude-3-5-sonnet-20241022';
+            EXCEPTION 
+                WHEN duplicate_column THEN 
+                    NULL;
+            END;
+        END $$;
+    """)
+
+def downgrade():
+    # Используем прямой SQL для удаления колонки
+    op.execute("""
+        DO $$ 
+        BEGIN 
+            BEGIN
+                ALTER TABLE users 
+                DROP COLUMN ai_model;
+            EXCEPTION 
+                WHEN undefined_column THEN 
+                    NULL;
+            END;
+        END $$;
+    """)

@@ -1,0 +1,28 @@
+"""add_ai_model_to_users
+
+Revision ID: xxx
+Revises: your_previous_revision
+Create Date: 2024-01-16 12:00:00.000000
+
+"""
+from alembic import op
+import sqlalchemy as sa
+
+# revision identifiers, used by Alembic
+revision = 'xxx'  # оставьте как есть
+down_revision = 'your_previous_revision'  # укажите ID предыдущей миграции
+branch_labels = None
+depends_on = None
+
+def upgrade():
+    # Добавляем колонку ai_model в таблицу users
+    op.add_column('users', 
+        sa.Column('ai_model', 
+                  sa.String(50), 
+                  nullable=False, 
+                  server_default='claude-3-5-sonnet-20241022')
+    )
+
+def downgrade():
+    # Удаляем колонку при откате
+    op.drop_column('users', 'ai_model')

@@ -1,0 +1,28 @@
+"""add_ai_model_and_trial
+
+Revision ID: xxx
+Revises: your_previous_revision
+Create Date: 2024-01-16 12:00:00.000000
+
+"""
+from alembic import op
+import sqlalchemy as sa
+
+# revision identifiers, used by Alembic
+revision = 'xxx'  # оставьте как есть
+down_revision = 'your_previous_revision'  # укажите ID предыдущей миграции
+branch_labels = None
+depends_on = None
+
+def upgrade():
+    # Добавляем колонку ai_model в таблицу users
+    op.add_column('users', sa.Column('ai_model', sa.String(50), nullable=False, server_default='claude-3-opus-20240229'))
+    
+    # Добавляем колонки для триальной подписки
+    op.add_column('subscription_plans', sa.Column('is_trial', sa.Boolean(), nullable=False, server_default='false'))
+    op.add_column('subscription_plans', sa.Column('trial_duration_days', sa.Integer()))
+
+def downgrade():
+    op.drop_column('users', 'ai_model')
+    op.drop_column('subscription_plans', 'is_trial')
+    op.drop_column('subscription_plans', 'trial_duration_days')

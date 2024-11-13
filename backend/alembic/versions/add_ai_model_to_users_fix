@@ -1,0 +1,25 @@
+"""add_ai_model_to_users_fix
+
+Revision ID: xxx  # это ID оставляем как есть
+Revises: 8dca15b4686a  # здесь укажите ID последней успешной миграции
+Create Date: 2024-01-16 12:00:00.000000
+
+"""
+from alembic import op
+import sqlalchemy as sa
+
+# revision identifiers, used by Alembic
+revision = 'xxx'  # оставляем как есть
+down_revision = 'ac5b8a1acfc8'  # ID последней успешной миграции
+branch_labels = None
+depends_on = None
+
+def upgrade():
+    op.execute("""
+        ALTER TABLE users 
+        ADD COLUMN IF NOT EXISTS ai_model VARCHAR(50) 
+        NOT NULL DEFAULT 'claude-3-5-sonnet-20241022'
+    """)
+
+def downgrade():
+    op.execute("ALTER TABLE users DROP COLUMN IF EXISTS ai_model")
