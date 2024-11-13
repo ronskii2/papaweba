@@ -9,7 +9,7 @@ TIMEOUT = 60.0
 
 async def test_chat_naming():
     async with httpx.AsyncClient(timeout=TIMEOUT) as client:
-        # Регистрация и аутентификация
+        # Регистрация
         unique_id = str(uuid.uuid4())[:8]
         register_data = {
             "email": f"test_{unique_id}@example.com",
@@ -23,6 +23,7 @@ async def test_chat_naming():
         )
         print("Register response:", response.status_code)
 
+        # Логин
         login_data = {
             "username": register_data["email"],
             "password": register_data["password"]
@@ -35,16 +36,30 @@ async def test_chat_naming():
         token = response.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
 
-        # Создаем чат
+        # Создание чата
         chat_data = {
-            "title": "New Chat"  # Временное название
+            "title": "New Chat"
         }
+        print("\nСоздание чата...")
         response = await client.post(
             f"{BASE_URL}{API_PREFIX}/chats/",
             json=chat_data,
             headers=headers
         )
-        chat = response.json()
+        
+        # Добавляем отладочную информацию
+        print(f"Status Code: {response.status_code}")
+        print(f"Response Headers: {response.headers}")
+        print(f"Response Content: {response.content}")
+        
+        try:
+            chat = response.json()
+            print("Parsed JSON:", chat)
+        except Exception as e:
+            print(f"JSON parsing error: {e}")
+            print("Raw response text:", response.text)
+            return
+
         chat_id = chat["id"]
         print("\nInitial chat:", chat)
 
@@ -53,16 +68,23 @@ async def test_chat_naming():
             "content": "Можешь ли помочь мне написать бизнес-предложение по новому экологически чистому упаковочному решению?",
             "role": "user"
         }
+        print(f"\nSending message to chat {chat_id}...")
         response = await client.post(
             f"{BASE_URL}{API_PREFIX}/chats/{chat_id}/messages/",
             json=message_data,
             headers=headers
         )
+        
+        # Добавляем отладочную информацию
+        print(f"Message Status Code: {response.status_code}")
+        print(f"Message Response Headers: {response.headers}")
+        print(f"Message Response Content: {response.content}")
+        
         print(f"response: {response}")
         print(f"\nMessage response status: {response.status_code}")
-        print("\nMessage sent, checking updated chat...")
 
         # Получаем обновленный чат
+        print("\nChecking updated chat...")
         response = await client.get(
             f"{BASE_URL}{API_PREFIX}/chats/{chat_id}",
             headers=headers

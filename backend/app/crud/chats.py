@@ -39,7 +39,8 @@ class CRUDChat:
         folder_id: Optional[UUID] = None,
         title: Optional[str] = None,
         bot_style: str = "standard",
-	is_memory_enabled: bool = True
+        is_memory_enabled: bool = True,
+        emoji: Optional[str] = None
     ) -> Chat:
         # Получаем следующий auto_title_number
         max_number = db.query(Chat).filter(
@@ -52,13 +53,13 @@ class CRUDChat:
             title=title or f"Chat {max_number + 1}",
             auto_title_number=max_number + 1,
             bot_style=bot_style,
-            is_memory_enabled=is_memory_enabled
+            is_memory_enabled=is_memory_enabled,
+            emoji=emoji
         )
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
         return db_obj
-
     @staticmethod
     async def update_chat_title_from_content(
         db: Session,

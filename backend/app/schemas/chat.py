@@ -39,6 +39,7 @@ class ChatMessageInDB(ChatMessageBase):
 
 class ChatBase(BaseModel):
     title: Optional[str] = None
+    emoji: Optional[str] = None
     bot_style: Optional[str] = "standard"
     is_memory_enabled: bool = True
 

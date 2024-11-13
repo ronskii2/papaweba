@@ -29,6 +29,7 @@ class Chat(Base):
     user_id: Mapped[UUID] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     folder_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey('chat_folders.id', ondelete='SET NULL'))
     title: Mapped[Optional[str]] = mapped_column(String(255))
+    emoji: Mapped[Optional[str]] = mapped_column(String(10))
     auto_title_number: Mapped[Optional[int]] = mapped_column(Integer)
     tags: Mapped[Optional[List[str]]] = mapped_column(ARRAY(String))
     bot_style: Mapped[Optional[str]] = mapped_column(String(50))
